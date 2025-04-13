@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
     private float[] gravity, geomagnetic;
     private float azimuth = 0f;
     private TextView directionText, shakeStatusText;
-    private final String PERMISSION = Manifest.permission.RECORD_AUDIO;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> manuallyPermissionResultLauncher;
     private MediaRecorder recorder;
@@ -68,11 +67,31 @@ public class LoginActivity extends AppCompatActivity {
     private TextView smileStatus;
     private boolean smileDetected = false;
     private FaceDetector faceDetector;
+    private final String[] REQUIRED_PERMISSIONS = new String[] {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+    };
+
+    private ActivityResultLauncher<String> permissionLauncher;
+    private ActivityResultLauncher<Intent> settingsLauncher;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        permissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> checkAllPermissions()
+        );
+
+        settingsLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> checkAllPermissions()
+        );
+
+        checkAllPermissions(); // להתחיל את הבדיקה
 
         findViews();
         startSmileDetection();
@@ -80,25 +99,6 @@ public class LoginActivity extends AppCompatActivity {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
-        requestPermissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (isGranted) {
-                        startRecording();
-                        startNoiseMonitoring();
-                    } else {
-                        checkMicrophonePermission();
-                    }
-                }
-        );
-
-        manuallyPermissionResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> checkMicrophonePermission()
-        );
-
-        checkMicrophonePermission();
 
         loginButton.setOnClickListener(v -> {
             String password = passwordInput.getText().toString();
@@ -118,6 +118,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
 
     private void findViews() {
         passwordInput = findViewById(R.id.passwordInput);
@@ -263,28 +267,6 @@ public class LoginActivity extends AppCompatActivity {
         noiseHandler.post(updateTask);
     }
 
-    private void checkMicrophonePermission() {
-        decibelText.setText("אין גישה למיקרופון. נדרש לאישור.");
-        if (ContextCompat.checkSelfPermission(this, PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-            startRecording();
-            startNoiseMonitoring();
-        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION)) {
-            showMicrophoneRationale();
-        } else {
-            showMicrophoneSettingsRedirect();
-        }
-    }
-
-    private void showMicrophoneRationale() {
-        new MaterialAlertDialogBuilder(this)
-                .setCancelable(false)
-                .setTitle("גישה למיקרופון")
-                .setMessage("האפליקציה צריכה את המיקרופון כדי לזהות רעש סביבתי כחלק מהתנאים לכניסה.")
-                .setPositiveButton("הבנתי", (dialog, which) -> requestPermissionLauncher.launch(PERMISSION))
-                .setNegativeButton("לא", null)
-                .show();
-    }
-
     private void showMicrophoneSettingsRedirect() {
         new MaterialAlertDialogBuilder(this)
                 .setCancelable(false)
@@ -377,5 +359,32 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void checkAllPermissions() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    showPermissionRationale(permission);
+                } else {
+                    permissionLauncher.launch(permission);
+                }
+                return; // יוצא אחרי טיפול בהרשאה הראשונה שלא ניתנה
+            }
+        }
+
+        // אם הגענו לכאן – כל ההרשאות תקינות
+        startSmileDetection();
+        startRecording();
+        startNoiseMonitoring();
+    }
+
+    private void showPermissionRationale(String permission) {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("נדרש אישור")
+                .setMessage("האפליקציה צריכה את ההרשאה הזו כדי לעבוד כראוי.")
+                .setPositiveButton("אפשר", (dialog, which) -> permissionLauncher.launch(permission))
+                .setNegativeButton("לא עכשיו", null)
+                .show();
     }
 }
