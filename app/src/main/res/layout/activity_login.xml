@@ -1,52 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/passwordInput"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="סיסמה / קלט אינדיקטור" />
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="התחבר"
-        android:layout_marginTop="16dp" />
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="סיסמה / קלט אינדיקטור" />
 
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#D32F2F"
-        android:layout_marginTop="16dp" />
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="התחבר"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/directionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="כיוון: לא ידוע"
-        android:layout_marginTop="16dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="חייך למצלמה כדי להיכנס :)"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/decibelText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="דציבלים: לא ידוע"
-        android:layout_marginTop="16dp" />
+        <!-- NEW: Camera Preview -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp"
+            android:background="#000" />
 
-    <TextView
-    android:id="@+id/shakeStatusText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="שקשוקים: 0"
-    android:layout_marginTop="16dp" />
+        <!-- NEW: Smile Status -->
+        <TextView
+            android:id="@+id/smileStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ממתין לחיוך..."
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#D32F2F"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/directionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="כיוון: לא ידוע"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/decibelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="דציבלים: לא ידוע"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/shakeStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="שקשוקים: 0"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>
