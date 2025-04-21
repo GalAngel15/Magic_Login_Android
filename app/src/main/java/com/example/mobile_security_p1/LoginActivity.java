@@ -245,6 +245,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 smileStatus.setText("חיוך זוהה! 😁");
                                                 smileDetected = true;
                                             } else {
+                                                if(smileDetected)
+                                                    smileDetected = false;
                                                 smileStatus.setText("ממתין לחיוך...");
                                             }
                                         }
@@ -377,7 +379,7 @@ public class LoginActivity extends AppCompatActivity {
                 float y = event.values[1];
                 float z = event.values[2];
                 double acceleration = Math.sqrt(x * x + y * y + z * z) - SensorManager.GRAVITY_EARTH;
-                if (acceleration > 5) {
+                if (acceleration > 8) {
                     long now = System.currentTimeMillis();
                     if (lastShakeTime == 0 || (now - lastShakeTime) < 1000) {
                         shakeCount++;
