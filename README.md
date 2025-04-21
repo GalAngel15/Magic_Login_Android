@@ -1,31 +1,30 @@
 # SmartLoginConditions 🚀
 
-An Android app with a fun and secure twist: the login screen only unlocks when **seven smart environmental conditions** are met!
+An Android app that turns your login screen into a **smart security challenge!**  
+To log in, users must satisfy **seven clever environmental conditions** — blending fun, sensors, and security.
 
-## 🔐 Conditions for successful login:
+---
+
+## 🔐 Can you meet all 7 conditions?
+
+To unlock the app, all of the following must be true:
 
 1. ✅ Battery percentage matches the user's input  
 2. 🧭 Phone is facing East  
-3. 🔊 Environment is noisy enough (detected via microphone)  
+3. 🔊 Environment is noisy enough (via microphone)  
 4. 🔌 Device is charging  
-5. 📱 Device has been shaken a few times  
-6. 🎵 Music is playing on the phone (Spotify, YouTube, etc.)  
-7. 😄 The user is smiling at the camera (detected using Google ML Kit Face Detection)
+5. 📱 Device has been shaken several times  
+6. 🎵 Music is playing on the device (Spotify, YouTube, etc.)  
+7. 😄 User is smiling at the front camera (Google ML Kit)
 
 ---
 
 ## 📸 Smile Detection
 
-Smile detection is done in real-time using the front camera and Google ML Kit's face detection API.  
+Smile detection is done in real-time using the front camera and **Google ML Kit's Face Detection API**.  
 Only users who smile confidently are allowed in! 😉
 
-> *(Note: Camera permission is required for this feature)*
-
----
-
-## 📱 Demo
-
-🎥 A short video will be available here soon to demonstrate the login process under different conditions.
+> 📷 *Camera permission is required for this feature*
 
 ---
 
@@ -35,19 +34,17 @@ Only users who smile confidently are allowed in! 😉
 - SensorManager
 - AudioManager
 - MediaRecorder
-- AudioRecord
 - Google ML Kit (Face Detection)
-- FusedLocationProviderClient (optional)
 - Activity Result APIs (modern permissions handling)
-- Material Design components
+- Material Design Components
 
 ---
 
-## 🛠️ How to run
+## 🛠️ How to Run
 
 1. Clone the repository  
 2. Open in Android Studio  
-3. Run on a real Android device (not emulator – sensors required)  
+3. Run on a real Android device (sensors required)  
 4. Grant microphone and camera permissions  
 5. Try to unlock by meeting all 7 conditions!
 
@@ -55,5 +52,5 @@ Only users who smile confidently are allowed in! 😉
 
 ## 🙋‍♂️ Author
 
-Built by [Gal Angel](https://www.linkedin.com/in/galangel)  
-Final project for mobile security course 📱🔒  
+Created by [Gal Angel](https://www.linkedin.com/in/galangel)  
+Final project for Mobile Security course 📱🔒
