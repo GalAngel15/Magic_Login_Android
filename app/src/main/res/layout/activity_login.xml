@@ -56,6 +56,13 @@
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="סיסמה: אחוז סוללה, כיוון: מזרח, רעש: מעל 70, שקשוקים: 3+, להפעיל מוזיקה ברקע, לחייך למצלמה"
+            android:layout_marginTop="16dp" />
+
+        <TextView
             android:id="@+id/directionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -20,6 +20,9 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -106,22 +109,49 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
             String password = passwordInput.getText().toString();
-            boolean allConditionsMet =
-                    isBatteryLevelCorrect(password)
-                            && isFacingEast()
-                            && isEnvironmentNoise()
-                            && isDeviceCharging()
-                            && hasUserShakenPhone()
-                            && isMusicPlaying()
-                            && smileDetected;
-            if (allConditionsMet) {
+
+            boolean batteryOk = isBatteryLevelCorrect(password);
+            boolean facingEast = isFacingEast();
+            boolean noiseOk = isEnvironmentNoise();
+            boolean charging = isDeviceCharging();
+            boolean shaken = hasUserShakenPhone();
+            boolean musicPlaying = isMusicPlaying();
+            boolean smiling = smileDetected;
+
+            if (batteryOk && facingEast && noiseOk && charging && shaken && musicPlaying && smiling) {
                 startActivity(new Intent(LoginActivity.this, SuccessActivity.class));
-            } else {
-                statusText.setText("התנאים לא התקיימו: סוללה / כיוון / רעש / טעינה / שקשוק / מוזיקה / חיוך");
+                return;
             }
+
+            SpannableStringBuilder resultText = new SpannableStringBuilder();
+            resultText.append("סטטוס תנאים:\n");
+
+            addConditionLine(resultText, "סיסמה תואמת לרמת סוללה", batteryOk);
+            addConditionLine(resultText, "המכשיר פונה מזרחה", facingEast);
+            addConditionLine(resultText, "הרעש בסביבה מספיק", noiseOk);
+            addConditionLine(resultText, "המכשיר בטעינה", charging);
+            addConditionLine(resultText, "בוצעו מספיק שקשוקים", shaken);
+            addConditionLine(resultText, "מוזיקה מתנגנת", musicPlaying);
+            addConditionLine(resultText, "חיוך זוהה", smiling);
+
+            statusText.setText(resultText);
         });
     }
 
+    private void addConditionLine(SpannableStringBuilder builder, String label, boolean isOk) {
+        String icon = isOk ? "✔️" : "❌";
+        int color = isOk ? 0xFF388E3C : 0xFFD32F2F; // ירוק / אדום
+
+        String line = icon + " " + label + "\n";
+        int start = builder.length();
+        builder.append(line);
+        builder.setSpan(
+                new ForegroundColorSpan(color),
+                start,
+                builder.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+    }
     private void findViews() {
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
